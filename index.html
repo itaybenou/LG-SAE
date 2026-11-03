@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LG-SAE: Local-Global Sparse Autoencoders learn a sparse compositional bridge between local and global concepts in vision models, enabling multiscale explanations and localized model steering.">
+  <meta property="og:title" content="Local–Global Sparse Autoencoders for Multiscale Interpretability in Vision Models"/>
+  <meta property="og:description" content="LG-SAE learns a sparse compositional bridge between local and global SAE concepts in vision models."/>
+  <meta property="og:url" content="https://itaybenou.github.io/LG-SAE/"/>
+  <meta property="og:image" content="https://itaybenou.github.io/LG-SAE/static/figures/overview.png"/>
+
+  <title>Local–Global Sparse Autoencoders for Multiscale Interpretability in Vision Models</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <style>
+    .figure-caption { font-size: 0.95rem; color: #4a4a4a; margin-top: 0.6rem; }
+    .results-table { margin: 1.5rem auto; font-size: 0.95rem; }
+    .results-table th, .results-table td { text-align: center !important; vertical-align: middle !important; }
+    .results-table td:first-child, .results-table th:first-child { text-align: left !important; }
+    .results-table tr.ours { background-color: #e3ebfa; font-weight: bold; }
+    .section-figure { max-width: 100%; height: auto; }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+
+<section class="publication-header">
+  <div class="hero-body">
+    <div class="container is-max-widescreen">
+      <div class="column has-text-centered">
+        <h1 class="title is-1 publication-title">Local–Global Sparse Autoencoders for Multiscale Interpretability in Vision Models</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="publication-author-block">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://itaybenou.github.io/" target="_blank">Itay Benou</a><sup>1,2</sup><span>&numsp;</span></span>
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=xt7uyAEAAAAJ&hl=iw&oi=ao" target="_blank">Tammy Riklin Raviv</a><sup>1,2</sup><span>&numsp;</span></span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>1</sup>School of Electrical and Computer Engineering, Ben-Gurion University of the Negev</span><br>
+            <span class="author-block"><sup>2</sup>Data Science Research Center, Ben-Gurion University of the Negev</span>
+          </div>
+
+          <div class="is-size-4 publication-authors">
+            <span class="author-block">NeurIPS 2026</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- TODO: replace # with the paper / arXiv URL -->
+              <span class="link-block">
+                <a href="#" target="_blank" class="external-link button is-normal is-rounded">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" target="_blank" class="external-link button is-normal is-rounded">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/itaybenou/LG-SAE" target="_blank" class="external-link button is-normal is-rounded">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#BibTeX" class="external-link button is-normal is-rounded">
+                  <span class="icon"><i class="fas fa-quote-right"></i></span>
+                  <span>BibTeX</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div class="container">
+          <div class="item">
+            <div class="column is-centered has-text-left">
+              <img src="static/figures/overview.png" alt="LG-SAE overview" class="section-figure"/>
+              <div class="content has-text-justified">
+                <br><p style="margin:8px;"></p>
+                We introduce <b>LG-SAE</b>, a multiscale interpretability framework that learns a sparse compositional bridge between local and global SAE concepts in vision models.
+                <br><p style="margin:8px;"></p>
+                <p style="font-size: 20px;"><b>Key Features</b></p>
+                <b>Local–Global Structure Discovery:</b>
+                By jointly operating on patch-level and image-level embeddings, <b>LG-SAE</b> discovers local and global concepts and explicitly learns the compositional links between them, revealing how high-level semantic concepts are built from a small set of spatially grounded components.
+                <br><p style="margin:8px;"></p>
+
+                <b>Multiscale Model Explanations:</b>
+                Using LG-SAE as a concept bottleneck, <b>LG-CBM</b> explains model predictions through the global concepts that contributed most to the output, and grounds each of them in the image via its most relevant local constituents, without compromising downstream accuracy.
+                <br><p style="margin:8px;"></p>
+
+                <b>Spatially Aware Concept Naming:</b>
+                We extend CLIP-Dissect to match local concept activations with dense patch-level vision-language similarities, assigning human-interpretable names to localized features and reducing context-driven labeling errors.
+                <br><p style="margin:8px;"></p>
+
+                <b>Multiscale Model Steering:</b>
+                Beyond standard interventions on global concepts, users can edit local concept activations within specific image regions; these edits propagate through the learned bridge, enabling targeted steering and correction of model predictions.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Visual understanding is inherently hierarchical, as high-level semantic concepts are composed of fine-grained, spatially localized components. Yet existing interpretability methods typically focus on a single feature scale, either local or global, leaving a critical gap in understanding the compositional structure between them. Recovering this structure without supervision is particularly challenging, as the correspondence between local and global concepts is latent, varies across samples, and may emerge only through inconsistent or partial patterns. To address this challenge, we introduce Local–Global Sparse Autoencoders (<b>LG-SAE</b>), a multiscale interpretability framework for vision models. The core innovation of LG-SAE is a learned bridge that explicitly captures the compositional relationships between local and global visual concepts. By jointly operating on patch-level and image-level embeddings, LG-SAE learns a sparse, interpretable graph that reveals how high-level semantic concepts are constructed from a small set of spatially grounded components. Building on this representation, we present a unified framework for discovering local-global concept relationships, explaining model predictions through multiscale Concept Bottleneck Models, and steering models via localized concept edits. Extensive evaluations show that our framework: (i) captures meaningful cross-scale concept relations; (ii) enables high-quality spatial grounding without compromising downstream accuracy; (iii) provides human-interpretable model explanations, as validated by a user study; and (iv) facilitates intuitive and effective model steering.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">How does it work?</h2>
+        <div class="content has-text-justified">
+          <p>
+            Given a pretrained vision model, LG-SAE decomposes its global (e.g., <code>CLS</code> token) and local (e.g., patch tokens) representations with separate global and local SAEs, producing global features \(z_G\) and local feature maps \(z_{L,p}\). A sparse, non-negative bridge matrix \(\mathcal{C}\) approximates the global activations from spatially pooled local activations \(\bar{z}_L\):
+          </p>
+          \[ z_{G,\mathrm{app}} = \mathrm{ReLU}\left(\mathcal{C}\,\bar{z}_L + b\right), \]
+          <p>
+            so that \(\mathcal{C}_{i,j}\) measures the contribution of local feature \(j\) to global feature \(i\). LG-SAE is trained in three stages:
+          </p>
+          <ol>
+            <li><b>Multiscale concept discovery.</b> The global and local SAEs are trained independently, yielding stable scale-specific sparse feature spaces.</li>
+            <li><b>Learning compositional relations.</b> With both SAEs frozen, the bridge is trained with an alignment loss \(\|z_G - z_{G,\mathrm{app}}\|_2^2\), a reconstruction loss through the frozen global decoder, and a sparsity penalty on \(\mathcal{C}\).</li>
+            <li><b>Iterative refinement.</b> We alternate between refining the local SAE with a composition-aware objective and re-fitting the bridge, so that local features better support the recovered compositional structure.</li>
+          </ol>
+          <p>
+            The result is a sparse, interpretable graph linking each global concept to a small set of spatially grounded local components.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3 has-text-centered">Discovering compositional structure</h2>
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column is-four-fifths">
+            <div class="content has-text-justified">
+              <p>
+                The learned bridge recovers known part–whole structure more faithfully than post-hoc statistical association methods. Compared with PPMI and co-occurrence baselines, LG-SAE captures cleaner compositional relations, and its local features align with semantic parts (e.g., of the "bird" super-category in Part-ImageNet).
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="has-text-centered">
+          <img src="static/figures/c_matrix_compare.png" alt="Compositional graphs of LG-SAE vs. statistical methods" class="section-figure"/>
+          <p class="figure-caption">Compositional graphs of LG-SAE vs. statistical methods. Top: LG-SAE captures cleaner compositional relations. Bottom: LG-SAE local features aligned with semantic parts of the "bird" super-category.</p>
+        </div>
+
+        <div class="columns is-centered" style="margin-top: 2rem;">
+          <div class="column is-four-fifths">
+            <div class="content has-text-justified">
+              <p>
+                Below, each example shows a global LG-SAE feature (top activating images) together with a connected local feature and its top activating regions.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="column is-centered has-text-centered">
+            <img src="static/figures/comp_result_1.png" alt="Composition example 1" width="650px"/>
+          </div>
+          <div class="column is-centered has-text-centered">
+            <img src="static/figures/comp_result_2.png" alt="Composition example 2" width="650px"/>
+          </div>
+          <div class="column is-centered has-text-centered">
+            <img src="static/figures/comp_result_3.png" alt="Composition example 3" width="650px"/>
+          </div>
+          <div class="column is-centered has-text-centered">
+            <img src="static/figures/comp_result_4.png" alt="Composition example 4" width="650px"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Explaining model predictions</h2>
+        <div class="content has-text-justified">
+          <p>
+            We use the global SAE features as a concept bottleneck and train a linear classifier on top of them, obtaining a <b>Local–Global Concept Bottleneck Model (LG-CBM)</b>. Each prediction is explained by the global concepts that contributed most to the predicted class, and each global concept is grounded in the image by its most relevant local constituents, selected through the bridge \(\mathcal{C}\).
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="has-text-centered">
+      <img src="static/figures/multiscale_explanations.png" alt="Multiscale explanations" class="section-figure" style="width: 760px;"/>
+      <p class="figure-caption">Multiscale explainability examples: for each image, the predicted class, the global concept contributing most strongly to the prediction, and the top-3 local concepts related to it.</p>
+    </div>
+
+    <div class="columns is-centered has-text-centered" style="margin-top: 2.5rem;">
+      <div class="column is-four-fifths">
+        <h3 class="title is-4">Spatial concept grounding</h3>
+        <div class="content has-text-justified">
+          <p>
+            On zero-shot concept grounding benchmarks (Part-ImageNet and COCO-Stuff), LG-CBM local concepts are substantially more spatially precise and consistent than recent concept localization methods.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="has-text-centered">
+      <img src="static/figures/qual_seg_results.png" alt="Qualitative concept grounding" class="section-figure" style="width: 800px;"/>
+      <p class="figure-caption">Qualitative concept grounding results.</p>
+    </div>
+
+    <div class="table-container">
+      <table class="table is-narrow is-hoverable results-table">
+        <thead>
+          <tr>
+            <th rowspan="2">Method</th>
+            <th colspan="2">Locality &uarr;</th>
+            <th colspan="2">Consistency &uarr;</th>
+            <th colspan="2">Impurity &darr;</th>
+          </tr>
+          <tr>
+            <th>IN-Part</th><th>COCO-Stuff</th>
+            <th>IN-Part</th><th>COCO-Stuff</th>
+            <th>IN-Part</th><th>COCO-Stuff</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>SALF-CBM</td><td>16.4</td><td>19.5</td><td>9.9</td><td>6.7</td><td>0.841</td><td>1.143</td></tr>
+          <tr><td>DN-CBM</td><td>18.7</td><td>17.9</td><td>9.3</td><td>5.7</td><td>0.761</td><td>1.235</td></tr>
+          <tr><td>MSAE</td><td>20.9</td><td>20.0</td><td>10.6</td><td>7.9</td><td>0.833</td><td>1.198</td></tr>
+          <tr><td>PatchSAE</td><td>32.2</td><td>34.6</td><td>13.1</td><td>12.7</td><td>0.353</td><td>0.663</td></tr>
+          <tr><td>CFM</td><td>44.3</td><td>44.5</td><td>15.3</td><td>13.1</td><td>0.333</td><td>0.539</td></tr>
+          <tr class="ours"><td>LG-CBM (ours)</td><td>56.5</td><td>50.7</td><td>46.7</td><td>49.2</td><td>0.119</td><td>0.240</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            <b>Classification accuracy.</b> These spatially grounded explanations come without compromising performance: with a CLIP backbone, LG-CBM reaches <b>78.4%</b> top-1 accuracy on ImageNet and <b>54.5%</b> on Places365, competitive with the highest-performing CBMs.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Multiscale model steering</h2>
+        <div class="content has-text-justified">
+          <p>
+            LG-CBM enables <i>localized interventions</i>: a user can suppress or amplify a local concept within a selected image region, and the edit is propagated through the bridge to the global concepts and the final prediction. In the example below, the model misclassifies a bicycle <i>water bottle</i> as a <i>disk brake</i>; amplifying a single local concept, "Flask", within the bottle region shifts the prediction to the correct class.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered is-vcentered">
+      <div class="column is-7 has-text-centered">
+        <img src="static/figures/steering_example.png" alt="Misclassification correction via local steering" class="section-figure"/>
+        <p class="figure-caption">Misclassification correction via a local intervention.</p>
+      </div>
+      <div class="column is-5 has-text-centered">
+        <img src="static/figures/steering_results.png" alt="Local concept suppression results" class="section-figure"/>
+        <p class="figure-caption">Local concept suppression on Part-ImageNet: suppressing a single anchored local concept within its part mask causes a monotonic drop in predicted-class probability, substantially larger than suppressing it outside the mask, while suppressing random concepts has virtually no effect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">User study</h2>
+        <div class="content has-text-justified">
+          <p>
+            In a user study with 32 participants, LG-SAE's compositional links were judged valid more often (and more consistently) than a statistical co-occurrence baseline, and our spatially aware concept names were preferred over CLIP-Dissect labels.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-half has-text-centered">
+        <img src="static/figures/survey_composition.png" alt="Concept composition survey" class="section-figure"/>
+        <p class="figure-caption">Concept composition survey.</p>
+      </div>
+      <div class="column is-half has-text-centered">
+        <img src="static/figures/survey_naming.png" alt="Concept naming survey" class="section-figure"/>
+        <p class="figure-caption">Concept naming survey.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <p>If you find this project useful for your research, please cite the following:</p>
+    <pre><code>@inproceedings{benou2026localglobal,
+  title={Local--Global Sparse Autoencoders for Multiscale Interpretability in Vision Models},
+  author={Benou, Itay and Riklin-Raviv, Tammy},
+  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
+  year={2026}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content">
+        <p>
+          This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+        </p>
+        <p>
+          Website source code based on the <a href="https://nerfies.github.io/">Nerfies</a> project page. If you want to reuse their <a href="https://github.com/nerfies/nerfies.github.io">source code</a>, please credit them appropriately.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
