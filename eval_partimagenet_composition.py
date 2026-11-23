@@ -19,7 +19,8 @@ Inputs
   --freq_patch_file : patch tokens of the SAE's training data (e.g. one training
       shard); its first --freq_n_images images define the token frequency
 
-Output: <output_dir>/results.json with precision, recall, F1 and TP/FP/FN.
+Output: <output_dir>/results.json with precision, recall, F1 and TP/FP/FN, plus
+supercategory_names, i_star, j_star, C_gt and C_ontology_submatrix.
 
 Example
   python eval_partimagenet_composition.py --config configs/eval/partimagenet_composition.yaml \\
@@ -37,6 +38,7 @@ Example
 import json
 import os
 
+import numpy as np
 import torch
 import yaml
 
@@ -128,16 +130,32 @@ def main():
                                           cfg.token_top_m, cfg.eps, cfg.batch_size, cfg.device)
     j_star, part_valid = select_j_star(mean_cos, active_tokens, cfg.min_active_patches)
 
-    metrics = edge_metrics(model.get_C().float().cpu().numpy(), i_star, supercat_valid,
-                           j_star, part_valid, ontology.ground_truth(), cfg.tau)
+    C = model.get_C().float().cpu().numpy()
+    C_gt = ontology.ground_truth()
+    metrics = edge_metrics(C, i_star, supercat_valid, j_star, part_valid, C_gt, cfg.tau)
     if metrics["n_skipped_pairs"]:
         print(f"warning: {metrics['n_skipped_pairs']} (supercategory, part) pairs skipped "
               f"(supercategory or part absent from the data)")
 
+    pairs = np.outer(supercat_valid, part_valid)
+    sub = C[np.ix_(np.maximum(i_star, 0), np.maximum(j_star, 0))]
+    C_ontology_submatrix = [
+        [float(sub[g, p]) if pairs[g, p] else None for p in range(sub.shape[1])]
+        for g in range(sub.shape[0])
+    ]
+
     os.makedirs(cfg.output_dir, exist_ok=True)
     path = os.path.join(cfg.output_dir, "results.json")
     with open(path, "w") as f:
-        json.dump({**metrics, "config": vars(cfg)}, f, indent=2)
+        json.dump({
+            **metrics,
+            "supercategory_names": ontology.supercat_names,
+            "i_star": i_star.tolist(),
+            "j_star": j_star.tolist(),
+            "C_gt": C_gt.astype(int).tolist(),
+            "C_ontology_submatrix": C_ontology_submatrix,
+            "config": vars(cfg),
+        }, f, indent=2)
     print(f"precision={metrics['precision']:.4f} recall={metrics['recall']:.4f} "
           f"F1={metrics['f1']:.4f} (TP={metrics['tp']} FP={metrics['fp']} FN={metrics['fn']})")
     print(f"saved {path}")
