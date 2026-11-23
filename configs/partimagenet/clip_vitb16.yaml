@@ -1,0 +1,12 @@
+# CLIP ViT-B/16 features for PartImageNet: penultimate-block patch tokens (196 x 768)
+# + final image embedding (512), as in configs/shards/clip_vitb16.yaml.
+# image_dir and output_dir are passed on the command line.
+
+backbone: clip
+model_name: ViT-B/16
+token_layer: 11
+hub_repo: null
+image_size: null
+batch_size: 128
+num_workers: 8
+device: cuda:0

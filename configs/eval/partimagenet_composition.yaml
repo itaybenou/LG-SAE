@@ -1,0 +1,19 @@
+# PartImageNet composition evaluation (canonical j* with a 5% token-frequency cap).
+# Backbone-independent. Model, data and output paths are passed on the command line:
+#   --checkpoint --model_config --patch_tokens --global_features --image_ids
+#   --labelmap_dir --ontology --freq_patch_file --output_dir
+
+background_label: 40
+
+# Frequency cap: token frequency measured on the first freq_n_images of freq_patch_file.
+freq_n_images: 1000
+freq_cap: 0.05
+
+# j* selection and scoring
+token_top_m: 1
+min_active_patches: 100
+tau: 0.0
+eps: 1.0e-8
+
+batch_size: 32
+device: cuda:0
