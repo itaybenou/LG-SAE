@@ -1,0 +1,27 @@
+# CLIP-Dissect of global SAE latents with OpenAI CLIP image embeddings.
+# Source: spatial-CLIP-dissect/describe_neurons_from_activations.py (+ similarity.soft_wpmi).
+# Paths are passed on the command line:
+#   --activations --image_dir --sample_stride --concept_set --output_dir
+# Or compute activations first (--activations none):
+#   --sae_checkpoint --model_config --global_features --sae_batch_size
+
+layer_name: z_global
+sae_checkpoint: null
+model_config: null
+global_features: null
+sae_batch_size: null
+cache_dir: null
+batch_size: 200
+num_workers: 8
+device: cuda:0
+
+clip_model: ViT-B/16
+
+# soft-WPMI
+top_k: 100
+softmax_temp: 10.0
+lam: 1.0
+p_start: 0.998
+p_end: 0.97
+min_prob: 1.0e-7
+unit_batch_size: 128

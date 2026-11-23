@@ -3,6 +3,10 @@ torchvision
 pyyaml
 tqdm
 packaging
+pandas
 # vendored OpenAI CLIP (lg_sae/third_party/clip)
 ftfy
 regex
+# CLIP-DINOiser dense features (describe_local_neurons.py); 2.24 keeps the
+# sequence-first transformer layout the MaskCLIP hooks rely on
+open_clip_torch==2.24.0
