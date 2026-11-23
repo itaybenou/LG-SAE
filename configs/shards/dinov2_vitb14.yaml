@@ -1,0 +1,17 @@
+# DINOv2 ViT-B/14: patch tokens (256 x 768) and CLS token (768), both from the
+# penultimate block's raw residual stream (before the final LayerNorm).
+# Source: overcomplete/save_dinov2_tokens_random_shards.py, save_dinov2_shards.py
+# image_dir and output_dir are passed on the command line; --shuffle overrides the default below.
+
+backbone: dinov2
+model_name: dinov2_vitb14
+token_layer: 11
+hub_repo: ~/.cache/torch/hub/facebookresearch_dinov2_main
+image_size: 224
+shuffle: true
+seed: 0
+shard_size: 12500
+save_patch_tokens: true
+batch_size: 256
+num_workers: 4
+device: cuda:0

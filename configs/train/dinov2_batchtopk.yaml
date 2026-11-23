@@ -1,0 +1,59 @@
+# LG-SAE, DINOv2 ViT-B/14 (patch + CLS tokens from the same penultimate block), BatchTopK SAEs.
+# Source: overcomplete/train_batchtopk_dinoB14_sae_layer11_fulldata_iterative_local.py
+# Data paths and save_dir are passed on the command line:
+#   --global_dir <.../global> --patch_dir <.../patch_tokens> --save_dir <run dir>
+
+backbone: dinov2
+device: cuda:0
+seed: 0
+clip_grad: 1.0
+
+# Model
+sae_type: batchtopk
+n_local: 8192
+n_global: 3072
+k_local: 16
+k_global: 96
+local_encoder: linear
+global_encoder: mlp_ln_1
+threshold_momentum: 0.9
+pooling: mean
+c_top_k: null
+
+# Stage 1: local SAE (patch tokens)
+local_epochs: 2
+local_lr: 5.0e-4
+local_batch_size: 4096
+local_aux_penalty: 0.01
+local_log_interval: 1000
+local_ckpt: null
+
+# Stage 2: global SAE (CLS tokens)
+global_epochs: 20
+global_lr: 5.0e-4
+global_batch_size: 512
+global_aux_penalty: 0.03
+global_log_interval: 100
+global_ckpt: null
+
+# Stage 3: bridge (also used by stage 4b)
+bridge_epochs: 5
+bridge_lr: 1.0e-3
+bridge_batch_size: 512
+bridge_w_rec: 0.5
+bridge_l1_C: 3.0
+bridge_log_interval: 100
+bridge_ckpt: null
+
+# Stage 4: iterative fine-tuning
+ft_rounds: 4
+ft_local_epochs: 1
+ft_local_lr: 1.0e-4
+ft_local_batch_size: 256
+ft_local_aux_penalty: 0.01
+ft_w_rec_bridge: 0.1
+ft_w_link: 0.5
+ft_freeze_local_dictionary: true
+ft_bridge_epochs: 1
+ft_bridge_lr: 1.0e-3
+ft_log_interval: 100

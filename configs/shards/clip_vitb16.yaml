@@ -1,0 +1,16 @@
+# CLIP ViT-B/16: penultimate-block patch tokens (196 x 768) + final image embedding (512).
+# Source: overcomplete/save_clip_tokens_random_shards.py, save_clip_tokens_shards.py
+# image_dir and output_dir are passed on the command line; --shuffle overrides the default below.
+
+backbone: clip
+model_name: ViT-B/16
+token_layer: 11
+hub_repo: null
+image_size: null
+shuffle: true
+seed: 0
+shard_size: 50000
+save_patch_tokens: true
+batch_size: 256
+num_workers: 8
+device: cuda:0

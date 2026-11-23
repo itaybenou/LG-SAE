@@ -1,0 +1,59 @@
+# LG-SAE, CLIP ViT-B/16, per-sample TopK SAEs.
+# Source: overcomplete/train_topk_clip.py
+# Data paths and save_dir are passed on the command line:
+#   --global_dir <.../global> --patch_dir <.../patch_tokens> --save_dir <run dir>
+
+backbone: clip
+device: cuda:0
+seed: 0
+clip_grad: 1.0
+
+# Model
+sae_type: topk
+n_local: 8192
+n_global: 2048
+k_local: 8
+k_global: 64
+local_encoder: linear
+global_encoder: linear
+threshold_momentum: null
+pooling: mean
+c_top_k: null
+
+# Stage 1: local SAE (patch tokens)
+local_epochs: 2
+local_lr: 5.0e-4
+local_batch_size: 2048
+local_aux_penalty: 0.01
+local_log_interval: 1000
+local_ckpt: null
+
+# Stage 2: global SAE (CLIP image embeddings)
+global_epochs: 120
+global_lr: 5.0e-4
+global_batch_size: 1024
+global_aux_penalty: 0.03
+global_log_interval: 100
+global_ckpt: null
+
+# Stage 3: bridge (also used by stage 4b)
+bridge_epochs: 5
+bridge_lr: 1.0e-3
+bridge_batch_size: 512
+bridge_w_rec: 0.5
+bridge_l1_C: 3.0
+bridge_log_interval: 100
+bridge_ckpt: null
+
+# Stage 4: iterative fine-tuning (disabled)
+ft_rounds: 0
+ft_local_epochs: 1
+ft_local_lr: 1.0e-4
+ft_local_batch_size: 256
+ft_local_aux_penalty: 0.01
+ft_w_rec_bridge: 0.1
+ft_w_link: 0.5
+ft_freeze_local_dictionary: true
+ft_bridge_epochs: 1
+ft_bridge_lr: 1.0e-3
+ft_log_interval: 100
