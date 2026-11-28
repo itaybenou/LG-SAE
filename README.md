@@ -1,6 +1,6 @@
 # **Local–Global Sparse Autoencoders for Multiscale Interpretability in Vision Models [NeurIPS'26]**
 
-
+![Local–Global SAE intro](videos/lgsae_intro_demo_v4.gif)
 
 ![Open the Concept Explorer](https://img.shields.io/badge/Open%20the%20Concept%20Explorer-1f6feb?style=for-the-badge&labelColor=0f172a)
 
